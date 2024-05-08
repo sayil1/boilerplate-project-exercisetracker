@@ -6,13 +6,12 @@ var bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// parse application/json
 app.use(bodyParser.json());
 require("dotenv").config();
 
 try {
-  mongoose.connect(
-    "mongodb+srv://sayil:sayil2194@cluster0.vfeqcic.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  mongoose.connect("");
 } catch (error) {
   console.log(error);
 }
@@ -41,6 +40,10 @@ const ExerciseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now, // Set current date as default
   },
+  // uid: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Exercise",
+  // },
 });
 
 const User = mongoose.model("Dog", UserSchema);
@@ -86,6 +89,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
   newEx.date = date;
   newEx.duration = duration;
   console.log(newEx);
+  let newData = newEx.save();
   let newDate = new Date(newEx.date).toDateString();
   return res.status(200).send({
     username: nuser.username,
